@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: wt-media
+  cloud:
+    nacos:
+      config:
+        server-addr: 10.168.1.110:8848
+        file-extension: yml
+      discovery:
+        server-addr: 10.168.1.110:8848

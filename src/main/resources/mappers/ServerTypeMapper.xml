@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wt.media.mapper.ServerTypeMapper">
+    <resultMap id="BaseResultMap" type="com.wt.media.domain.ServerType" >
+        <id column="id" property="id" jdbcType="TINYINT"/>
+    	<result column="name" property="name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="BaseColumn">
+        id,name
+    </sql>
+    <sql id="JoinTable">
+      server_type
+    </sql>
+    <sql id="WhereClause">
+                <if test="name != null">
+                    and name = #{name,jdbcType=VARCHAR}
+                </if>
+                <if test="_query!=null">
+                    ${_query}
+                </if>
+    </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+    select
+    <include refid="BaseColumn" />
+    from  <include refid="JoinTable"/>
+    where server_type.id = #{id,jdbcType=TINYINT}
+  </select>
+    <select id="selectByPrimaryKeys" resultMap="BaseResultMap">
+      select
+      <include refid="BaseColumn" />
+      from  <include refid="JoinTable"/>
+      where server_type.id in
+       <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+      select
+      <include refid="BaseColumn" />
+      from <include refid="JoinTable"/>
+      <where>
+        <include refid="WhereClause"/>
+      </where>
+    </select>
+  <delete id="deleteByPrimaryKey" >
+      delete from server_type
+      where id = #{id,jdbcType=TINYINT}
+  </delete>
+  <delete id="deleteByPrimaryKeys" >
+        delete from server_type
+        where id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+   </delete>
+  <delete id="deleteAll">
+    delete from server_type
+     <where>
+        <include refid="WhereClause"/>
+      </where>
+  </delete>
+
+   <insert id="insert" parameterType="com.wt.media.domain.ServerType" >
+      insert into server_type (id,name)
+      values (#{id,jdbcType=TINYINT},#{name,jdbcType=VARCHAR});
+   </insert>
+
+      <insert id="insertSelective" parameterType="com.wt.media.domain.ServerType" >
+      insert into server_type
+      <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="id != null" >
+          id,
+        </if>
+        <if test="name != null" >
+          name,
+        </if>
+      </trim>
+      <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="id != null" >
+            #{id,jdbcType=TINYINT},
+        </if>
+        <if test="name != null" >
+            #{name,jdbcType=VARCHAR},
+        </if>
+      </trim>
+    </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wt.media.domain.ServerType" >
+    update server_type
+    <set >
+      <if test="name != null" >
+      name=#{name,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=TINYINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wt.media.domain.ServerType">
+      update server_type
+      set
+             name=#{name,jdbcType=VARCHAR}
+      where id = #{id,jdbcType=TINYINT}
+  </update>
+</mapper>

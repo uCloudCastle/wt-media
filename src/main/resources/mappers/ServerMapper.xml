@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wt.media.mapper.ServerMapper">
+    <resultMap id="BaseResultMap" type="com.wt.media.domain.Server" >
+        <id column="id" property="id" jdbcType="BIGINT"/>
+    	<result column="name" property="name" jdbcType="VARCHAR"/>
+    	<result column="host" property="host" jdbcType="VARCHAR"/>
+    	<result column="app_key" property="appKey" jdbcType="VARCHAR"/>
+    	<result column="app_secret" property="appSecret" jdbcType="VARCHAR"/>
+    	<result column="access_token" property="accessToken" jdbcType="VARCHAR"/>
+    	<result column="expire_time" property="expireTime" jdbcType="BIGINT"/>
+    	<result column="type_id" property="typeId" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="BaseColumn">
+        id,name,host,app_key,app_secret,access_token,expire_time,type_id
+    </sql>
+    <sql id="JoinTable">
+      server
+    </sql>
+    <sql id="WhereClause">
+                <if test="name != null">
+                    and name = #{name,jdbcType=VARCHAR}
+                </if>
+                <if test="host != null">
+                    and host = #{host,jdbcType=VARCHAR}
+                </if>
+                <if test="appKey != null">
+                    and app_key = #{appKey,jdbcType=VARCHAR}
+                </if>
+                <if test="appSecret != null">
+                    and app_secret = #{appSecret,jdbcType=VARCHAR}
+                </if>
+                <if test="accessToken != null">
+                    and access_token = #{accessToken,jdbcType=VARCHAR}
+                </if>
+                <if test="expireTime != null">
+                    and expire_time = #{expireTime,jdbcType=BIGINT}
+                </if>
+                <if test="typeId != null">
+                    and type_id = #{typeId,jdbcType=TINYINT}
+                </if>
+                <if test="_query!=null">
+                    ${_query}
+                </if>
+    </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+    select
+    <include refid="BaseColumn" />
+    from  <include refid="JoinTable"/>
+    where server.id = #{id,jdbcType=BIGINT}
+  </select>
+    <select id="selectByPrimaryKeys" resultMap="BaseResultMap">
+      select
+      <include refid="BaseColumn" />
+      from  <include refid="JoinTable"/>
+      where server.id in
+       <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+      select
+      <include refid="BaseColumn" />
+      from <include refid="JoinTable"/>
+      <where>
+        <include refid="WhereClause"/>
+      </where>
+    </select>
+  <delete id="deleteByPrimaryKey" >
+      delete from server
+      where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByPrimaryKeys" >
+        delete from server
+        where id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+   </delete>
+  <delete id="deleteAll">
+    delete from server
+     <where>
+        <include refid="WhereClause"/>
+      </where>
+  </delete>
+
+   <insert id="insert" parameterType="com.wt.media.domain.Server" >
+      insert into server (id,name,host,app_key,app_secret,access_token,expire_time,type_id)
+      values (#{id,jdbcType=BIGINT},#{name,jdbcType=VARCHAR},#{host,jdbcType=VARCHAR},#{appKey,jdbcType=VARCHAR},#{appSecret,jdbcType=VARCHAR},#{accessToken,jdbcType=VARCHAR},#{expireTime,jdbcType=BIGINT},#{typeId,jdbcType=TINYINT});
+   </insert>
+
+      <insert id="insertSelective" parameterType="com.wt.media.domain.Server" >
+      insert into server
+      <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="id != null" >
+          id,
+        </if>
+        <if test="name != null" >
+          name,
+        </if>
+        <if test="host != null" >
+          host,
+        </if>
+        <if test="appKey != null" >
+          app_key,
+        </if>
+        <if test="appSecret != null" >
+          app_secret,
+        </if>
+        <if test="accessToken != null" >
+          access_token,
+        </if>
+        <if test="expireTime != null" >
+          expire_time,
+        </if>
+        <if test="typeId != null" >
+          type_id,
+        </if>
+      </trim>
+      <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="id != null" >
+            #{id,jdbcType=BIGINT},
+        </if>
+        <if test="name != null" >
+            #{name,jdbcType=VARCHAR},
+        </if>
+        <if test="host != null" >
+            #{host,jdbcType=VARCHAR},
+        </if>
+        <if test="appKey != null" >
+            #{appKey,jdbcType=VARCHAR},
+        </if>
+        <if test="appSecret != null" >
+            #{appSecret,jdbcType=VARCHAR},
+        </if>
+        <if test="accessToken != null" >
+            #{accessToken,jdbcType=VARCHAR},
+        </if>
+        <if test="expireTime != null" >
+            #{expireTime,jdbcType=BIGINT},
+        </if>
+        <if test="typeId != null" >
+            #{typeId,jdbcType=TINYINT},
+        </if>
+      </trim>
+    </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wt.media.domain.Server" >
+    update server
+    <set >
+      <if test="name != null" >
+      name=#{name,jdbcType=VARCHAR},
+      </if>
+      <if test="host != null" >
+      host=#{host,jdbcType=VARCHAR},
+      </if>
+      <if test="appKey != null" >
+      app_key=#{appKey,jdbcType=VARCHAR},
+      </if>
+      <if test="appSecret != null" >
+      app_secret=#{appSecret,jdbcType=VARCHAR},
+      </if>
+      <if test="accessToken != null" >
+      access_token=#{accessToken,jdbcType=VARCHAR},
+      </if>
+      <if test="expireTime != null" >
+      expire_time=#{expireTime,jdbcType=BIGINT},
+      </if>
+      <if test="typeId != null" >
+      type_id=#{typeId,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wt.media.domain.Server">
+      update server
+      set
+             name=#{name,jdbcType=VARCHAR},
+             host=#{host,jdbcType=VARCHAR},
+             app_key=#{appKey,jdbcType=VARCHAR},
+             app_secret=#{appSecret,jdbcType=VARCHAR},
+             access_token=#{accessToken,jdbcType=VARCHAR},
+             expire_time=#{expireTime,jdbcType=BIGINT},
+             type_id=#{typeId,jdbcType=TINYINT}
+      where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

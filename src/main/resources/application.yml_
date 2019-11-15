@@ -1,0 +1,38 @@
+
+mybatis:
+  mapper-locations: classpath*:mappers/**/*Mapper.xml
+
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+  datasource: # 数据源配置
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://10.168.1.110:3306/wt-media
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: WTqazxsw$1
+
+    # druid拓展部分
+    # 初始化大小，最小，最大
+    initialSize: 1
+    minIdle: 3
+    maxActive: 20
+    # 配置获取连接等待超时的时间
+    maxWait: 60000
+    # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    timeBetweenEvictionRunsMillis: 60000
+    # 配置一个连接在池中最小生存的时间，单位是毫秒
+    minEvictableIdleTimeMillis: 30000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    # 打开PSCache，并且指定每个连接上PSCache的大小
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    # 合并多个DruidDataSource的监控数据
+    useGlobalDataSourceStat: true
+    filters: stat,wall,logback
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000

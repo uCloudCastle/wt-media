@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wt.media.mapper.CameraMapper">
+    <resultMap id="BaseResultMap" type="com.wt.media.domain.Camera" >
+        <id column="id" property="id" jdbcType="BIGINT"/>
+    	<result column="code" property="code" jdbcType="VARCHAR"/>
+    	<result column="name" property="name" jdbcType="VARCHAR"/>
+    	<result column="server_id" property="serverId" jdbcType="BIGINT"/>
+        <result column="server_type_id" property="serverTypeId" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="BaseColumn">
+        id,code,name,server_id
+    </sql>
+    <sql id="JoinTable">
+      camera
+    </sql>
+    <sql id="WhereClause">
+                <if test="code != null">
+                    and code = #{code,jdbcType=VARCHAR}
+                </if>
+                <if test="name != null">
+                    and name = #{name,jdbcType=VARCHAR}
+                </if>
+                <if test="serverId != null">
+                    and server_id = #{serverId,jdbcType=BIGINT}
+                </if>
+                <if test="serverTypeId != null">
+                    and server_type_id = #{serverTypeId,jdbcType=TINYINT}
+                </if>
+                <if test="_query!=null">
+                    ${_query}
+                </if>
+    </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+    select
+    <include refid="BaseColumn" />
+    from  <include refid="JoinTable"/>
+    where camera.id = #{id,jdbcType=BIGINT}
+  </select>
+    <select id="selectByPrimaryKeys" resultMap="BaseResultMap">
+      select
+      <include refid="BaseColumn" />
+      from  <include refid="JoinTable"/>
+      where camera.id in
+       <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+      select
+      <include refid="BaseColumn" />
+      from <include refid="JoinTable"/>
+      <where>
+        <include refid="WhereClause"/>
+      </where>
+    </select>
+  <delete id="deleteByPrimaryKey" >
+      delete from camera
+      where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByPrimaryKeys" >
+        delete from camera
+        where id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+   </delete>
+  <delete id="deleteAll">
+    delete from camera
+     <where>
+        <include refid="WhereClause"/>
+      </where>
+  </delete>
+
+   <insert id="insert" parameterType="com.wt.media.domain.Camera" >
+      insert into camera (id,code,name,server_id,server_type_id)
+      values (#{id,jdbcType=BIGINT},#{code,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{serverId,jdbcType=BIGINT},#{serverTypeId,jdbcType=TINYINT});
+   </insert>
+
+      <insert id="insertSelective" parameterType="com.wt.media.domain.Camera" >
+      insert into camera
+      <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="id != null" >
+          id,
+        </if>
+        <if test="code != null" >
+          code,
+        </if>
+        <if test="name != null" >
+          name,
+        </if>
+        <if test="serverId != null" >
+          server_id,
+        </if>
+        <if test="serverTypeId!=null">
+            server_type_id,
+        </if>
+      </trim>
+      <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="id != null" >
+            #{id,jdbcType=BIGINT},
+        </if>
+        <if test="code != null" >
+            #{code,jdbcType=VARCHAR},
+        </if>
+        <if test="name != null" >
+            #{name,jdbcType=VARCHAR},
+        </if>
+        <if test="serverId != null" >
+            #{serverId,jdbcType=BIGINT},
+        </if>
+         <if test="serverTypeId!=null">
+           #{serverTypeId,jdbcType=TINYINT},
+         </if>
+      </trim>
+    </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wt.media.domain.Camera" >
+    update camera
+    <set >
+      <if test="code != null" >
+      code=#{code,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+      name=#{name,jdbcType=VARCHAR},
+      </if>
+      <if test="serverId != null" >
+      server_id=#{serverId,jdbcType=BIGINT},
+      </if>
+        <if test="serverTypeId!=null">
+          server_type_id=#{serverTypeId,jdbcType=TINYINT},
+        </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wt.media.domain.Camera">
+      update camera
+      set
+             code=#{code,jdbcType=VARCHAR},
+             name=#{name,jdbcType=VARCHAR},
+             server_id=#{serverId,jdbcType=BIGINT},
+             server_type_id=#{serverTypeId,jdbcType=TINYINT}
+      where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
