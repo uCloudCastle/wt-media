@@ -10,7 +10,9 @@ public class Camera{
     private String code;
     private String name;
     private Long serverId;
+    private String serverName;
     private Short serverTypeId;
+    private String serverTypeName;
 
     public Long getId(){
             return this.id;
@@ -50,6 +52,22 @@ public class Camera{
 
     public void setServerTypeId(Short serverTypeId) {
         this.serverTypeId = serverTypeId;
+    }
+
+    public String getServerName() {
+        return serverName;
+    }
+
+    public void setServerName(String serverName) {
+        this.serverName = serverName;
+    }
+
+    public String getServerTypeName() {
+        return serverTypeName;
+    }
+
+    public void setServerTypeName(String serverTypeName) {
+        this.serverTypeName = serverTypeName;
     }
 
     private String _query;

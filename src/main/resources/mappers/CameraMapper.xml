@@ -12,10 +12,10 @@
     </resultMap>
 
     <sql id="BaseColumn">
-        id,code,name,server_id
+        camera.id,code,camera.name,server_id,server.name as serverName
     </sql>
     <sql id="JoinTable">
-      camera
+      camera inner join server on camera.server_id=server.id
     </sql>
     <sql id="WhereClause">
                 <if test="code != null">
