@@ -22,7 +22,7 @@
     </sql>
     <sql id="WhereClause">
                 <if test="name != null">
-                    and name = #{name,jdbcType=VARCHAR}
+                    and name like '%${name}%'
                 </if>
                 <if test="host != null">
                     and host = #{host,jdbcType=VARCHAR}
@@ -88,12 +88,12 @@
       </where>
   </delete>
 
-   <insert id="insert" parameterType="com.wt.media.domain.Server" >
+   <insert id="insert" parameterType="com.wt.media.domain.Server" useGeneratedKeys="true" keyProperty="id">
       insert into server (id,name,host,app_key,app_secret,access_token,expire_time,type_id)
       values (#{id,jdbcType=BIGINT},#{name,jdbcType=VARCHAR},#{host,jdbcType=VARCHAR},#{appKey,jdbcType=VARCHAR},#{appSecret,jdbcType=VARCHAR},#{accessToken,jdbcType=VARCHAR},#{expireTime,jdbcType=BIGINT},#{typeId,jdbcType=TINYINT});
    </insert>
 
-      <insert id="insertSelective" parameterType="com.wt.media.domain.Server" >
+      <insert id="insertSelective" parameterType="com.wt.media.domain.Server" useGeneratedKeys="true" keyProperty="id">
       insert into server
       <trim prefix="(" suffix=")" suffixOverrides="," >
         <if test="id != null" >

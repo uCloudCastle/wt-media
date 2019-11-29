@@ -12,7 +12,7 @@
     </resultMap>
 
     <sql id="BaseColumn">
-        camera.id,code,camera.name,server_id,server.name as serverName
+        camera.id,code,camera.name,server_id,server.name as serverName,server_type_id
     </sql>
     <sql id="JoinTable">
       camera inner join server on camera.server_id=server.id
@@ -22,7 +22,7 @@
                     and code = #{code,jdbcType=VARCHAR}
                 </if>
                 <if test="name != null">
-                    and name = #{name,jdbcType=VARCHAR}
+                    and name like '%${name}%'
                 </if>
                 <if test="serverId != null">
                     and server_id = #{serverId,jdbcType=BIGINT}
@@ -76,12 +76,12 @@
       </where>
   </delete>
 
-   <insert id="insert" parameterType="com.wt.media.domain.Camera" >
+   <insert id="insert" parameterType="com.wt.media.domain.Camera" useGeneratedKeys="true" keyProperty="id">
       insert into camera (id,code,name,server_id,server_type_id)
       values (#{id,jdbcType=BIGINT},#{code,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{serverId,jdbcType=BIGINT},#{serverTypeId,jdbcType=TINYINT});
    </insert>
 
-      <insert id="insertSelective" parameterType="com.wt.media.domain.Camera" >
+      <insert id="insertSelective" parameterType="com.wt.media.domain.Camera" useGeneratedKeys="true" keyProperty="id">
       insert into camera
       <trim prefix="(" suffix=")" suffixOverrides="," >
         <if test="id != null" >

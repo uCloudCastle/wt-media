@@ -23,12 +23,30 @@ public class HikvisionApi {
         String CAMERA_ONLINE= ARTEMIS_PATH + "/api/nms/v1/online/camera/get";
     }
 
+    public enum Protocol{
+        HLS("hls"),RTSP("rtsp");
 
-    public String getPreviewURL(String host,String appKey,String appSecret,String cameraIndexCode){
+        String protocol;
+        Protocol(String protocol){
+            this.protocol=protocol;
+        }
+    }
+
+    /**
+     *
+     * @param host
+     * @param appKey
+     * @param appSecret
+     * @param cameraIndexCode
+     * @param protocol
+     * @param streamType  码流类型;  0 主码流 1:子码流
+     * @return
+     */
+    public String getPreviewURL(String host,String appKey,String appSecret,String cameraIndexCode,Protocol protocol,Integer streamType){
         JSONObject jsonBody = new JSONObject();
         jsonBody.put("cameraIndexCode", cameraIndexCode);
-        jsonBody.put("streamType", 1);
-        jsonBody.put("protocol", "rtsp");
+        jsonBody.put("streamType", streamType);
+        jsonBody.put("protocol", protocol.protocol);//rtsp
         jsonBody.put("transmode", 1);
 //        jsonBody.put("expand", "streamform=rtp");
         String body = jsonBody.toJSONString();
@@ -51,10 +69,10 @@ public class HikvisionApi {
 
     public static void main(String[] args) {
         HikvisionApi api=new HikvisionApi();
-        String result = api.getPreviewURL("https://183.63.122.10:443","28039438","mbXqDip9D4RBGNGBpGVg","6cc27148558d4c379a948d94af670d88");
-        System.out.println("result结果示例: " + result);
-
-       /* String result = api.getCaremaOnline("https://183.63.122.10:443","28039438","mbXqDip9D4RBGNGBpGVg","6cc27148558d4c379a948d94af670d88");
+      /*  String result = api.getPreviewURL("https://183.63.122.10:443","24136945","xSAoYB7OikSVXAklTSWO","6cc27148558d4c379a948d94af670d88",Protocol.HLS,0);
         System.out.println("result结果示例: " + result);*/
+
+        String result = api.getCaremaOnline("https://183.63.122.10:443","24136945","xSAoYB7OikSVXAklTSWO","6cc27148558d4c379a948d94af670d88");
+        System.out.println("result结果示例: " + result);
     }
 }

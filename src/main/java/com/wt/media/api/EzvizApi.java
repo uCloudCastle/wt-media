@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
@@ -24,6 +25,10 @@ public class EzvizApi {
          * 获取萤石云Token API接口
          */
         String ACCESS_TOKEN ="https://open.ys7.com/api/lapp/token/get";
+
+        String DEVICE_INFO="https://open.ys7.com/api/lapp/device/info";
+
+        String LIVE_ADDRESS="https://open.ys7.com/api/lapp/live/address/get";
     }
 
     public static class Token{
@@ -78,11 +83,56 @@ public class EzvizApi {
         return null;
     }
 
+    public Object getDeviceInfo(String accessToken,String deviceSerial){
+        if(StringUtils.isEmpty(deviceSerial))
+            return null;
+        deviceSerial=deviceSerial.substring(0,deviceSerial.indexOf("/"));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+        map.add("accessToken", accessToken);
+        map.add("deviceSerial",deviceSerial);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+
+        JSONObject result=restTemplate.postForObject(Api.DEVICE_INFO,request, JSONObject.class);
+        logger.info(Api.ACCESS_TOKEN +"\t\t"+result.toJSONString());
+
+        if(result.getString("code").equals("200")){
+            JSONObject data=result.getJSONObject("data");
+            return data;
+        }
+        return result.getString("msg");
+    }
+
+    public Object getLiveAddress(String accessToken,String deviceSerial){
+        if(StringUtils.isEmpty(deviceSerial))
+            return null;
+
+        deviceSerial=deviceSerial.replace('/',':');
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+        map.add("accessToken", accessToken);
+        map.add("source",deviceSerial);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+
+        JSONObject result=restTemplate.postForObject(Api.LIVE_ADDRESS,request, JSONObject.class);
+        logger.info(Api.ACCESS_TOKEN +"\t\t"+result.toJSONString());
+
+        if(result.getString("code").equals("200")){
+            return result.getJSONArray("data");
+        }
+        return result.getString("msg");
+    }
+
 
     public static void main(String[] args) {
         long l=LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
 
         EzvizApi api=new EzvizApi();
         Token token= api.getAccessToken("a5cba0b45f004a159d660734fdfcf2cc","5155c81fef6acdd2dde53a43db9bb7dd");
+
+        Object result=api.getLiveAddress(token.getAccessToken(),"D12891375/1");
+
     }
 }
