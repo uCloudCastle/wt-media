@@ -56,11 +56,11 @@ public class HikvisionApi {
         return  result;
     }
 
-    public String getCaremaOnline(String host,String appKey,String appSecret,String cameraIndexCode){
+    public String getCaremaOnline(String host,String appKey,String appSecret,String[] cameraIndexCode){
         JSONObject jsonBody = new JSONObject();
-        jsonBody.put("indexCodes", new String[]{cameraIndexCode});
+        jsonBody.put("indexCodes", cameraIndexCode);
         jsonBody.put("pageNo",1);
-        jsonBody.put("pageSize",1);
+        jsonBody.put("pageSize",cameraIndexCode.length);
         String body = jsonBody.toJSONString();
         String result= HikvisionNetTools.doPostStringArtemis(host, appKey, appSecret, Api.CAMERA_ONLINE,body);
 
@@ -71,8 +71,8 @@ public class HikvisionApi {
         HikvisionApi api=new HikvisionApi();
       /*  String result = api.getPreviewURL("https://183.63.122.10:443","24136945","xSAoYB7OikSVXAklTSWO","6cc27148558d4c379a948d94af670d88",Protocol.HLS,0);
         System.out.println("result结果示例: " + result);*/
-
-        String result = api.getCaremaOnline("https://183.63.122.10:443","24136945","xSAoYB7OikSVXAklTSWO","6cc27148558d4c379a948d94af670d88");
+        String[] cameraIndexCode=new String[]{"450d7f0c1664466a8dd7bd67b90a321c","97e9dac20f4a4eb0a51586e71c8fa2b9"};
+        String result = api.getCaremaOnline("https://183.63.122.10:443","24136945","daxgyVZpUpguT0F6Bcig",cameraIndexCode);
         System.out.println("result结果示例: " + result);
     }
 }

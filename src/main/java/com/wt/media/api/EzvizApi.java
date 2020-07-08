@@ -11,8 +11,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Scanner;
 
 /**
  * 萤石云API接口
@@ -126,13 +128,13 @@ public class EzvizApi {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         long l=LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
 
         EzvizApi api=new EzvizApi();
         Token token= api.getAccessToken("a5cba0b45f004a159d660734fdfcf2cc","5155c81fef6acdd2dde53a43db9bb7dd");
-
+        //   "D55911814/1"
         Object result=api.getLiveAddress(token.getAccessToken(),"D12891375/1");
-
+        System.in.read();
     }
 }

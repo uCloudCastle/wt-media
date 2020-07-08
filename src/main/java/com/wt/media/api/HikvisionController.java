@@ -33,7 +33,7 @@ public class HikvisionController extends AdviceController {
     }
 
     @GetMapping("/CameraOnline")
-    public String getCameraOnLineStatus(@RequestParam Long serverId,@RequestParam String code){
+    public String getCameraOnLineStatus(@RequestParam Long serverId,@RequestParam String[] code){
         Server server=serverMapper.selectByPrimaryKey(serverId);
         return hikvisionApi.getCaremaOnline(server.getHost(),server.getAppKey(),server.getAppSecret(),code);
     }

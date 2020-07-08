@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("Ezviz")
@@ -47,13 +49,18 @@ public class EzvizController extends AdviceController {
     }
 
     @GetMapping("/DeviceInfo")
-    public Result getDeviceInfo(@RequestParam Long serverId, @RequestParam String deviceSerial) {
+    public Result getDeviceInfo(@RequestParam Long serverId, @RequestParam String[] deviceSerial) {
         EzvizApi.Token token = getAccessToken(serverId).getData();
-        Object result = this.ezvizApi.getDeviceInfo(token.getAccessToken(), deviceSerial);
-        if (result != null && result instanceof JSONObject)
-            return Result.SUCCESS().setData(result);
-
-        return Result.FAIL().setMsg(result.toString());
+        List<Object> results=new ArrayList<>(deviceSerial.length);
+        for(int i=0,l=deviceSerial.length;i<l;i++){
+            Object result = this.ezvizApi.getDeviceInfo(token.getAccessToken(), deviceSerial[i]);
+            if (result != null && result instanceof JSONObject){
+                results.add(result);
+            }else {
+                results.add(result.toString());
+            }
+        }
+        return Result.SUCCESS().setData(results);
     }
 
     @GetMapping("/LiveAddress")

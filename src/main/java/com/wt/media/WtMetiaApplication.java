@@ -23,7 +23,7 @@ import java.util.Map;
 public class WtMetiaApplication {
 
     public static void main(String[] args) {
-        test();
+//        test();
         SpringApplication.run(WtMetiaApplication.class, args);
     }
 
