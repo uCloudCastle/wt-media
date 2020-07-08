@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.wt.media</groupId>
-    <artifactId>wt-metia</artifactId>
+    <artifactId>wt-media</artifactId>
     <version>1.0</version>
-    <name>wt-metia</name>
+    <name>wt-media</name>
     <description>流媒体微服务</description>
 
     <properties>
